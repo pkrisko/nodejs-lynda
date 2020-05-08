@@ -3,8 +3,8 @@
 
 const questions = [
     "What is your name?",
-    "What would you reather be doing?",
-    "What is your language of choice"
+    "What is your favorite thing to do?",
+    "What is your programming language of choice?"
 ];
 
 const answers = [];
@@ -17,10 +17,9 @@ const ask = (i = 0) => {
 ask(); // Make initial call.
 process.stdin.on("data", data => {
     answers.push(data.toString().trim());
-    if (answers.length < questions.length) {
-        return ask(answers.length);
-    }
-    process.exit();
+    answers.length < questions.length
+        ? ask(answers.length)
+        : process.exit();
 });
 
 process.on("exit", () => {
