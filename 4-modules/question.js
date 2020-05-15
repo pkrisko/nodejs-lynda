@@ -1,4 +1,4 @@
-const readline = require('readline');
+const { collectAnswers } = require('./lib/questionService');
 
 const questions = [
   "What is your name? ",
@@ -6,25 +6,13 @@ const questions = [
   "What are you trying to do with Node.js? "
 ];
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
+const answerEvents = collectAnswers(questions);
+
+answerEvents.on("answer", answer => {
+  console.log(`Just received answer: ${answer}`);
 });
 
-const collectAnswers = (questions, done) => {
-  let answers = [];
-  // Callback invoked once user has answered a question.
-  const questionAnswered = answer => {
-    answers.push(answer);
-    answers.length < questions.length
-      ? rl.question(questions[answers.length], questionAnswered)
-      : done(answers);
-  }
-  // Initiate first question.
-  rl.question(questions[0], questionAnswered);
-};
-
-collectAnswers(questions, answers => {
+answerEvents.on("complete", answers => {
   const [name, location, goal] = answers;
   console.log(`Hey ${name} from ${location}, good luck with ${goal}`);
   process.exit();
